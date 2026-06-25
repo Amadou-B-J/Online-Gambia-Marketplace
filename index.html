@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Gambia Marketplace</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="overlay"></div>
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div class="logo">
+                🛍️ Online Gambia Marketplace
+            </div>
+
+            <input
+                type="text"
+                class="search-bar"
+                placeholder="Search products, brands and categories">
+
+            <div id="cart-sidebar">
+
+             <button id="close-cart">✖</button>
+
+             <h2>Shopping Cart</h2>
+
+             <ul id="cart-items"></ul>
+
+             <h3> Total: GMD
+             <span id="cart-total">0</span> </h3>
+
+             <button id="checkout-btn">
+               Checkout
+              </button>
+
+            </div>
+                <div class="cart-icon" id="cart-button">
+                🛒 Cart (<span id="cart-count">0</span>)
+            </div>
+
+        </header>
+
+        <!-- CATEGORY ICONS -->
+
+        <section class="categories">
+
+    <button class="category-btn">📱 Electronics</button>
+
+    <button class="category-btn">👕 Fashion</button>
+
+    <button class="category-btn">🥬 Groceries</button>
+
+    <button class="category-btn">📚 Books</button>
+
+    <button class="category-btn">🏠 Home</button>
+
+        </section>
+
+        <!-- HERO BANNER -->
+
+        <section class="hero-banner">
+
+            <img
+                 src="https://picsum.photos/1200/400"
+                 alt="Marketplace Banner">
+
+            <div class="hero-content">
+
+                <h1>Support Local Gambian Businesses</h1>
+
+                <p>
+                    Shop quality products from trusted sellers
+                    across Banjul.
+                </p>
+
+                <button>
+                    Shop Now
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- FEATURED DEALS -->
+
+        <section class="featured-deals">
+
+            <h2>🔥 Today's Deals</h2>
+
+            <div class="deal-container">
+
+                <div class="deal-card">
+                    20% OFF Electronics
+                </div>
+
+                <div class="deal-card">
+                    Free Delivery in Banjul
+                </div>
+
+                <div class="deal-card">
+                    Buy 2 Get 1 Free
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- FEATURED PRODUCTS -->
+
+        <section id="products">
+
+            <h2>Featured Products</h2>
+
+            <div class="product-container">
+
+                <div class="product-card">
+
+                    <img
+                        src="https://picsum.photos/id/180/250/180"
+                        alt="Wireless Headphones">
+
+                    <h3 class="product-name">
+                        Wireless Headphones
+                    </h3>
+
+                    <p class="product-price">
+                        2500
+                    </p>
+
+                    <button class="add-cart">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+                <div class="product-card">
+
+                    <img
+                        src="https://picsum.photos/id/0/250/180"
+                        alt="HP Laptop">
+
+                    <h3 class="product-name">
+                        HP Laptop
+                    </h3>
+
+                    <p class="product-price">
+                        25000
+                    </p>
+
+                    <button class="add-cart">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+                <div class="product-card">
+
+                    <img
+                        src="https://picsum.photos/id/160/250/180"
+                        alt="Samsung Galaxy Smartphone">
+
+                    <h3 class="product-name">
+                        Samsung Galaxy Smartphone
+                    </h3>
+
+                    <p class="product-price">
+                        15000
+                    </p>
+
+                    <button class="add-cart">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- TOP SELLERS -->
+
+        <section id="top-sellers">
+
+            <h2>Top Sellers</h2>
+
+            <div class="seller-container">
+
+                <div class="seller-card">
+
+                    <img
+                        src="https://via.placeholder.com/100"
+                        alt="Seller Logo">
+
+                    <h3>Banjul Electronics</h3>
+
+                </div>
+
+                <div class="seller-card">
+
+                    <img
+                        src="https://via.placeholder.com/100"
+                        alt="Seller Logo">
+
+                    <h3>Gambia Fashion Hub</h3>
+
+                </div>
+
+                <div class="seller-card">
+
+                    <img
+                        src="https://via.placeholder.com/100"
+                        alt="Seller Logo">
+
+                    <h3>Smart Gadgets Store</h3>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- BECOME A SELLER -->
+
+        <section id="contact">
+
+            <h2>Become a Seller</h2>
+
+            <form action="https://formspree.io/f/xvznkazk" method="POST">
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Full Name"
+                    required>
+
+                <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    required>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                    required>
+
+                <input
+                    type="text"
+                    name="business_name"
+                    placeholder="Business Name"
+                    required>
+
+                <input
+                    type="text"
+                    name="business_location"
+                    placeholder="Business Location"
+                    required>
+
+                <textarea
+                    name="products"
+                    rows="5"
+                    placeholder="Products you want to sell">
+                </textarea>
+
+                <button type="submit">
+                    Submit Application
+                </button>
+
+                <button type="reset">
+                    Clear Form
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <p>
+                © 2026 Online Gambia Marketplace.
+                All Rights Reserved.
+            </p>
+
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
