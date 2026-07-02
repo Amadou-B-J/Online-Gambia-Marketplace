@@ -1,11 +1,102 @@
 alert("JavaScript Loaded!");
-
 console.log("OGM Marketplace Loaded");
 
+/* =======================================
+SUPABASE
+======================================= */
 
-/* ==========================
-   CART DATA
-========================== */
+function displayProducts(data){
+
+const productsContainer =
+
+document.getElementById(
+
+"products-container"
+
+);
+
+productsContainer.innerHTML = "";
+
+data.forEach(product => {
+
+productsContainer.innerHTML += `
+
+<div class="product-card">
+
+<span class="badge">
+
+New
+
+</span>
+
+<img src="${product.image}">
+
+<h3>
+
+${product.title}
+
+</h3>
+
+<p class="seller">
+
+${product.seller}
+
+</p>
+
+<div class="price">
+
+GMD ${product.price}
+
+</div>
+
+<button class="add-cart">
+
+Add To Cart
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+async function loadProducts(){
+
+const { data, error } = await supabase
+
+.from("products")
+
+.select("*");
+
+
+if(error){
+
+console.error(error);
+
+return;
+
+}
+
+console.log(data);
+
+/*
+
+Later we will dynamically generate cards
+
+displayProducts(data);
+
+*/
+
+}
+
+
+/* =======================================
+CART DATA
+======================================= */
 
 let cart = JSON.parse(
 
@@ -18,9 +109,9 @@ localStorage.getItem(
 ) || [];
 
 
-/* ==========================
-   ELEMENTS
-========================== */
+/* =======================================
+ELEMENTS
+======================================= */
 
 const cartButton =
 document.getElementById(
@@ -86,9 +177,9 @@ document.querySelectorAll(
 );
 
 
-/* ==========================
-   OPEN CART
-========================== */
+/* =======================================
+OPEN CART
+======================================= */
 
 function openCart(){
 
@@ -107,11 +198,11 @@ overlay.classList.add(
 }
 
 
-/* ==========================
-   CLOSE CART
-========================== */
+/* =======================================
+CLOSE CART
+======================================= */
 
-function closeCartSidebar(){
+function closeCart(){
 
 cartSidebar.classList.remove(
 
@@ -128,9 +219,9 @@ overlay.classList.remove(
 }
 
 
-/* ==========================
-   SAVE CART
-========================== */
+/* =======================================
+SAVE CART
+======================================= */
 
 function saveCart(){
 
@@ -149,9 +240,9 @@ cart
 }
 
 
-/* ==========================
-   RENDER CART
-========================== */
+/* =======================================
+RENDER CART
+======================================= */
 
 function renderCart(){
 
@@ -208,8 +299,7 @@ GMD ${itemTotal.toLocaleString()}
 
 <div class="quantity">
 
-<button
-onclick="decrease(${index})">
+<button onclick="decrease(${index})">
 
 −
 
@@ -221,8 +311,7 @@ ${item.quantity}
 
 </span>
 
-<button
-onclick="increase(${index})">
+<button onclick="increase(${index})">
 
 +
 
@@ -237,11 +326,8 @@ onclick="increase(${index})">
 `;
 
 
-cartItems.appendChild(
+cartItems.appendChild(li);
 
-li
-
-);
 
 });
 
@@ -258,9 +344,9 @@ saveCart();
 }
 
 
-/* ==========================
-   ADD TO CART
-========================== */
+/* =======================================
+ADD TO CART
+======================================= */
 
 addButtons.forEach(button=>{
 
@@ -287,42 +373,16 @@ product.querySelector(
 
 "h3"
 
-)
-
-.textContent;
+).textContent;
 
 
-const priceElement =
+const price = parseInt(
 
 product.querySelector(
 
 ".price"
 
-);
-
-
-if(
-
-!priceElement
-
-){
-
-console.error(
-
-"Price element missing"
-
-);
-
-return;
-
-}
-
-
-const price =
-
-parseInt(
-
-priceElement
+)
 
 .textContent
 
@@ -353,9 +413,7 @@ product.querySelector(
 
 "img"
 
-)
-
-.src;
+).src;
 
 
 const existing =
@@ -369,11 +427,7 @@ item.name === name
 );
 
 
-if(
-
-existing
-
-){
+if(existing){
 
 existing.quantity++;
 
@@ -400,8 +454,8 @@ renderCart();
 
 openCart();
 
-
 }
+
 
 );
 
@@ -409,9 +463,9 @@ openCart();
 });
 
 
-/* ==========================
-   INCREASE
-========================== */
+/* =======================================
+INCREASE
+======================================= */
 
 function increase(index){
 
@@ -419,15 +473,14 @@ cart[index]
 
 .quantity++;
 
-
 renderCart();
 
 }
 
 
-/* ==========================
-   DECREASE
-========================== */
+/* =======================================
+DECREASE
+======================================= */
 
 function decrease(index){
 
@@ -460,15 +513,11 @@ renderCart();
 }
 
 
-/* ==========================
-   EVENTS
-========================== */
+/* =======================================
+EVENTS
+======================================= */
 
-if(
-
-cartButton
-
-){
+if(cartButton){
 
 cartButton.addEventListener(
 
@@ -481,49 +530,37 @@ openCart
 }
 
 
-if(
-
-closeCartBtn
-
-){
+if(closeCartBtn){
 
 closeCartBtn.addEventListener(
 
 "click",
 
-closeCartSidebar
+closeCart
 
 );
 
 }
 
 
-if(
-
-overlay
-
-){
+if(overlay){
 
 overlay.addEventListener(
 
 "click",
 
-closeCartSidebar
+closeCart
 
 );
 
 }
 
 
-/* ==========================
-   CHECKOUT
-========================== */
+/* =======================================
+CHECKOUT
+======================================= */
 
-if(
-
-checkoutButton
-
-){
+if(checkoutButton){
 
 checkoutButton.addEventListener(
 
@@ -558,14 +595,15 @@ alert(
 
 }
 
+
 );
 
 }
 
 
-/* ==========================
-   HERO SLIDER
-========================== */
+/* =======================================
+HERO SLIDER
+======================================= */
 
 const slides =
 
@@ -575,7 +613,6 @@ document.querySelectorAll(
 
 );
 
-
 const dots =
 
 document.querySelectorAll(
@@ -583,7 +620,6 @@ document.querySelectorAll(
 ".dot"
 
 );
-
 
 let current = 0;
 
@@ -632,10 +668,6 @@ dots[index]
 }
 
 
-/* ==========================
-   DOTS NAVIGATION
-========================== */
-
 if(
 
 dots.length > 0
@@ -653,7 +685,6 @@ dot.addEventListener(
 
 
 current = index;
-
 
 showSlide(
 
@@ -674,17 +705,17 @@ current
 }
 
 
-/* ==========================
-   AUTO SLIDER
-========================== */
-
 if(
 
 slides.length > 0
 
 ){
 
-showSlide(0);
+showSlide(
+
+0
+
+);
 
 
 setInterval(()=>{
@@ -717,11 +748,13 @@ current
 }
 
 
-/* ==========================
-   INITIALIZE
-========================== */
+/* =======================================
+INITIALIZE
+======================================= */
 
 renderCart();
+
+loadProducts();
 
 console.log(
 
