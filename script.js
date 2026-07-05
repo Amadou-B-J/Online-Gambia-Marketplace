@@ -1,583 +1,186 @@
-alert("JavaScript Loaded!");
-console.log("OGM Marketplace Loaded");
+console.log("OGM Loaded");
 
-/* =======================================
-SUPABASE
-======================================= */
+/* ==========================
+LOGIN DROPDOWN
+========================== */
 
-function displayProducts(data){
-
-const productsContainer =
-
+const loginSelect =
 document.getElementById(
-
-"products-container"
-
+"login-select"
 );
 
-productsContainer.innerHTML = "";
+if(loginSelect){
 
-data.forEach(product => {
+loginSelect.addEventListener(
 
-productsContainer.innerHTML += `
+"change",
 
-<div class="product-card">
+function(){
 
-<span class="badge">
+const value =
+this.value;
 
-New
+if(
+value === "customer"
+){
 
-</span>
+window.location.href =
+"customer-login.html";
 
-<img src="${product.image}">
+}
 
-<h3>
+else if(
+value === "seller"
+){
 
-${product.title}
+window.location.href =
+"seller-login.html";
 
-</h3>
+}
 
-<p class="seller">
+else if(
+value === "delivery"
+){
 
-${product.seller}
+window.location.href =
+"delivery-login.html";
 
-</p>
+}
 
-<div class="price">
+}
 
-GMD ${product.price}
-
-</div>
-
-<button class="add-cart">
-
-Add To Cart
-
-</button>
-
-</div>
-
-`;
-
-});
+);
 
 }
 
 
-async function loadProducts(){
+/* ==========================
+PASSWORD VALIDATION
+========================== */
 
-const { data, error } = await supabase
+const password =
+document.getElementById(
+"password"
+);
 
-.from("products")
+const confirmPassword =
+document.getElementById(
+"confirm-password"
+);
 
-.select("*");
+const message =
+document.getElementById(
+"password-message"
+);
 
 
-if(error){
+/* ==========================
+LIVE PASSWORD MATCH
+========================== */
 
-console.error(error);
+if(
+
+password &&
+
+confirmPassword &&
+
+message
+
+){
+
+confirmPassword.addEventListener(
+
+"keyup",
+
+()=>{
+
+if(
+
+password.value === ""
+
+){
+
+message.textContent = "";
 
 return;
 
 }
 
-console.log(data);
+if(
 
-/*
+password.value ===
 
-Later we will dynamically generate cards
+confirmPassword.value
 
-displayProducts(data);
+){
 
-*/
+message.textContent =
 
-}
+"✓ Passwords match";
 
+message.style.color =
 
-/* =======================================
-CART DATA
-======================================= */
-
-let cart = JSON.parse(
-
-localStorage.getItem(
-
-"shoppingCart"
-
-)
-
-) || [];
-
-
-/* =======================================
-ELEMENTS
-======================================= */
-
-const cartButton =
-document.getElementById(
-
-"cart-button"
-
-);
-
-const closeCartBtn =
-document.getElementById(
-
-"close-cart"
-
-);
-
-const cartSidebar =
-document.getElementById(
-
-"cart-sidebar"
-
-);
-
-const overlay =
-document.getElementById(
-
-"overlay"
-
-);
-
-const cartCount =
-document.getElementById(
-
-"cart-count"
-
-);
-
-const cartItems =
-document.getElementById(
-
-"cart-items"
-
-);
-
-const cartTotal =
-document.getElementById(
-
-"cart-total"
-
-);
-
-const checkoutButton =
-document.getElementById(
-
-"checkout-btn"
-
-);
-
-const addButtons =
-document.querySelectorAll(
-
-".add-cart"
-
-);
-
-
-/* =======================================
-OPEN CART
-======================================= */
-
-function openCart(){
-
-cartSidebar.classList.add(
-
-"active"
-
-);
-
-overlay.classList.add(
-
-"active"
-
-);
-
-}
-
-
-/* =======================================
-CLOSE CART
-======================================= */
-
-function closeCart(){
-
-cartSidebar.classList.remove(
-
-"active"
-
-);
-
-overlay.classList.remove(
-
-"active"
-
-);
-
-}
-
-
-/* =======================================
-SAVE CART
-======================================= */
-
-function saveCart(){
-
-localStorage.setItem(
-
-"shoppingCart",
-
-JSON.stringify(
-
-cart
-
-)
-
-);
-
-}
-
-
-/* =======================================
-RENDER CART
-======================================= */
-
-function renderCart(){
-
-cartItems.innerHTML = "";
-
-let total = 0;
-
-let count = 0;
-
-
-cart.forEach((item,index)=>{
-
-
-const itemTotal =
-
-item.price *
-
-item.quantity;
-
-
-total += itemTotal;
-
-count += item.quantity;
-
-
-const li =
-
-document.createElement(
-
-"li"
-
-);
-
-
-li.innerHTML = `
-
-<div class="cart-item">
-
-<img src="${item.image}">
-
-<div class="cart-info">
-
-<h4>
-
-${item.name}
-
-</h4>
-
-<div class="cart-price">
-
-GMD ${itemTotal.toLocaleString()}
-
-</div>
-
-<div class="quantity">
-
-<button onclick="decrease(${index})">
-
-−
-
-</button>
-
-<span>
-
-${item.quantity}
-
-</span>
-
-<button onclick="increase(${index})">
-
-+
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-
-cartItems.appendChild(li);
-
-
-});
-
-
-cartCount.textContent = count;
-
-cartTotal.textContent =
-
-total.toLocaleString();
-
-
-saveCart();
-
-}
-
-
-/* =======================================
-ADD TO CART
-======================================= */
-
-addButtons.forEach(button=>{
-
-
-button.addEventListener(
-
-"click",
-
-()=>{
-
-
-const product =
-
-button.closest(
-
-".product-card"
-
-);
-
-
-const name =
-
-product.querySelector(
-
-"h3"
-
-).textContent;
-
-
-const price = parseInt(
-
-product.querySelector(
-
-".price"
-
-)
-
-.textContent
-
-.replace(
-
-"GMD",
-
-""
-
-)
-
-.replace(
-
-/,/g,
-
-""
-
-)
-
-.trim()
-
-);
-
-
-const image =
-
-product.querySelector(
-
-"img"
-
-).src;
-
-
-const existing =
-
-cart.find(
-
-item =>
-
-item.name === name
-
-);
-
-
-if(existing){
-
-existing.quantity++;
+"green";
 
 }
 
 else{
 
-cart.push({
+message.textContent =
 
-name,
+"✗ Passwords do not match";
 
-price,
+message.style.color =
 
-image,
-
-quantity:1
-
-});
+"red";
 
 }
 
-
-renderCart();
-
-openCart();
-
 }
-
 
 );
 
-
-});
-
-
-/* =======================================
-INCREASE
-======================================= */
-
-function increase(index){
-
-cart[index]
-
-.quantity++;
-
-renderCart();
-
 }
 
 
-/* =======================================
-DECREASE
-======================================= */
+/* ==========================
+CUSTOMER REGISTRATION
+========================== */
 
-function decrease(index){
+const customerRegisterForm =
+document.getElementById(
 
-cart[index]
+"customer-register-form"
 
-.quantity--;
-
+);
 
 if(
 
-cart[index]
-
-.quantity <= 0
+customerRegisterForm
 
 ){
 
-cart.splice(
+customerRegisterForm
 
-index,
+.addEventListener(
 
-1
+"submit",
 
-);
+function(e){
 
-}
-
-
-renderCart();
-
-}
-
-
-/* =======================================
-EVENTS
-======================================= */
-
-if(cartButton){
-
-cartButton.addEventListener(
-
-"click",
-
-openCart
-
-);
-
-}
-
-
-if(closeCartBtn){
-
-closeCartBtn.addEventListener(
-
-"click",
-
-closeCart
-
-);
-
-}
-
-
-if(overlay){
-
-overlay.addEventListener(
-
-"click",
-
-closeCart
-
-);
-
-}
-
-
-/* =======================================
-CHECKOUT
-======================================= */
-
-if(checkoutButton){
-
-checkoutButton.addEventListener(
-
-"click",
-
-()=>{
-
+e.preventDefault();
 
 if(
 
-cart.length===0
+password.value !==
+
+confirmPassword.value
 
 ){
 
 alert(
 
-"Cart is empty"
+"Passwords do not match"
 
 );
 
@@ -585,176 +188,510 @@ return;
 
 }
 
+const customer = {
+
+email:
+
+document.getElementById(
+
+"email"
+
+).value,
+
+password:
+
+document.getElementById(
+
+"password"
+
+).value
+
+};
+
+localStorage.setItem(
+
+"customer",
+
+JSON.stringify(
+
+customer
+
+)
+
+);
 
 alert(
 
-"Checkout coming soon!"
+"Registration Successful"
 
 );
 
+window.location.href =
+
+"customer-login.html";
 
 }
-
-
-);
-
-}
-
-
-/* =======================================
-HERO SLIDER
-======================================= */
-
-const slides =
-
-document.querySelectorAll(
-
-".slide"
-
-);
-
-const dots =
-
-document.querySelectorAll(
-
-".dot"
-
-);
-
-let current = 0;
-
-
-function showSlide(index){
-
-slides.forEach(slide=>{
-
-slide.classList.remove(
-
-"active"
-
-);
-
-});
-
-
-dots.forEach(dot=>{
-
-dot.classList.remove(
-
-"active"
-
-);
-
-});
-
-
-slides[index]
-
-.classList.add(
-
-"active"
-
-);
-
-
-dots[index]
-
-.classList.add(
-
-"active"
 
 );
 
 }
 
+
+/* ==========================
+CUSTOMER LOGIN
+========================== */
+
+const customerLoginForm =
+document.getElementById(
+
+"customer-login-form"
+
+);
 
 if(
 
-dots.length > 0
+customerLoginForm
 
 ){
 
-dots.forEach((dot,index)=>{
+customerLoginForm
+
+.addEventListener(
+
+"submit",
+
+function(e){
+
+e.preventDefault();
+
+const email =
+
+document.getElementById(
+
+"customer-email"
+
+).value;
+
+const userPassword =
+
+document.getElementById(
+
+"customer-password"
+
+).value;
+
+const customer =
+
+JSON.parse(
+
+localStorage.getItem(
+
+"customer"
+
+)
+
+);
+
+if(
+
+customer &&
+
+customer.email === email &&
+
+customer.password === userPassword
+
+){
+
+alert(
+
+"Login Successful"
+
+);
+
+window.location.href =
+
+"customer-dashboard.html";
+
+}
+
+else{
+
+alert(
+
+"Invalid Email or Password"
+
+);
+
+}
+
+}
+
+);
+
+}
+
+/* ==========================
+SELLER PASSWORD VALIDATION
+========================== */
+
+const sellerPassword =
+document.getElementById(
+"seller-password"
+);
+
+const sellerConfirm =
+document.getElementById(
+"seller-confirm-password"
+);
+
+const sellerMessage =
+document.getElementById(
+"seller-password-message"
+);
+
+if(
+
+sellerPassword &&
+
+sellerConfirm &&
+
+sellerMessage
+
+){
+
+sellerConfirm.addEventListener(
+
+"keyup",
+
+()=>{
+
+if(
+
+sellerPassword.value === ""
+
+){
+
+sellerMessage.textContent = "";
+
+return;
+
+}
+
+if(
+
+sellerPassword.value ===
+
+sellerConfirm.value
+
+){
+
+sellerMessage.textContent =
+
+"✓ Passwords match";
+
+sellerMessage.style.color =
+
+"green";
+
+}
+
+else{
+
+sellerMessage.textContent =
+
+"✗ Passwords do not match";
+
+sellerMessage.style.color =
+
+"red";
+
+}
+
+}
+
+);
+
+}
+
+const sellerForm =
+document.getElementById(
+"seller-register-form"
+);
+
+if(sellerForm){
+
+sellerForm.addEventListener(
+
+"submit",
+
+function(e){
+
+if(
+
+sellerPassword.value !==
+
+sellerConfirm.value
+
+){
+
+e.preventDefault();
+
+alert(
+
+"Passwords do not match"
+
+);
+
+}
+
+}
+
+);
+
+}
+
+/* ==========================
+SELLER LOGIN
+========================== */
+
+const sellerLoginForm =
+document.getElementById(
+
+"seller-login-form"
+
+);
+
+if(
+
+sellerLoginForm
+
+){
+
+sellerLoginForm
+
+.addEventListener(
+
+"submit",
+
+function(e){
+
+e.preventDefault();
+
+alert(
+
+"Seller authentication will be added later."
+
+);
+
+}
+
+);
+
+}
+
+/* ==========================
+DELIVERY PASSWORD VALIDATION
+========================== */
+
+const deliveryPassword =
+document.getElementById(
+"delivery-password"
+);
+
+const deliveryConfirm =
+document.getElementById(
+"delivery-confirm-password"
+);
+
+const deliveryMessage =
+document.getElementById(
+"delivery-password-message"
+);
+
+if(
+
+deliveryPassword &&
+
+deliveryConfirm &&
+
+deliveryMessage
+
+){
+
+deliveryConfirm.addEventListener(
+
+"keyup",
+
+()=>{
+
+if(
+
+deliveryPassword.value === ""
+
+){
+
+deliveryMessage.textContent = "";
+
+return;
+
+}
+
+if(
+
+deliveryPassword.value ===
+
+deliveryConfirm.value
+
+){
+
+deliveryMessage.textContent =
+
+"✓ Passwords match";
+
+deliveryMessage.style.color =
+
+"green";
+
+}
+
+else{
+
+deliveryMessage.textContent =
+
+"✗ Passwords do not match";
+
+deliveryMessage.style.color =
+
+"red";
+
+}
+
+}
+
+);
+
+}
+
+const deliveryForm =
+document.getElementById(
+"delivery-register-form"
+);
+
+if(deliveryForm){
+
+deliveryForm.addEventListener(
+
+"submit",
+
+function(e){
+
+if(
+
+deliveryPassword.value !==
+
+deliveryConfirm.value
+
+){
+
+e.preventDefault();
+
+alert(
+
+"Passwords do not match"
+
+);
+
+}
+
+}
+
+);
+
+}
+
+/* ==========================
+DELIVERY LOGIN
+========================== */
+
+const deliveryLoginForm =
+document.getElementById(
+
+"delivery-login-form"
+
+);
+
+if(
+
+deliveryLoginForm
+
+){
+
+deliveryLoginForm
+
+.addEventListener(
+
+"submit",
+
+function(e){
+
+e.preventDefault();
+
+alert(
+
+"Delivery authentication will be added later."
+
+);
+
+}
+
+);
+
+}
 
 
-dot.addEventListener(
+/* ==========================
+LOGOUT
+========================== */
+
+const logoutButton =
+document.getElementById(
+
+"logout"
+
+);
+
+if(
+
+logoutButton
+
+){
+
+logoutButton.addEventListener(
 
 "click",
 
 ()=>{
 
+localStorage.removeItem(
 
-current = index;
-
-showSlide(
-
-current
+"customer"
 
 );
 
+window.location.href =
+
+"index.html";
+
+}
+
+);
 
 }
 
 
-);
-
-
-});
-
-
-}
-
-
-if(
-
-slides.length > 0
-
-){
-
-showSlide(
-
-0
-
-);
-
-
-setInterval(()=>{
-
-
-current++;
-
-
-if(
-
-current >= slides.length
-
-){
-
-current = 0;
-
-}
-
-
-showSlide(
-
-current
-
-);
-
-
-},4000);
-
-
-}
-
-
-/* =======================================
-INITIALIZE
-======================================= */
-
-renderCart();
-
-loadProducts();
+/* ==========================
+READY
+========================== */
 
 console.log(
 
